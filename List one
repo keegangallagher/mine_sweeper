@@ -1,0 +1,58 @@
+import random          
+num=[]
+list_one=[]
+
+def bombs(c):
+    while len(num)<c**2:
+        x=random.randint(1,6)
+        if x==1:
+            num.append(1)
+        else:
+            num.append(0)
+       
+def numbers(c):
+    bombs(c)
+    for i in range(0,(c**2)):
+        if num[i]==1:
+            list_one.append('B')
+        else:
+            n=check(i,c)
+            list_one.append(n)
+def check(i,c):
+    n = 0
+    side = i // c
+    down = i % c
+    if side > 0 and down > 0 and num[i - c - 1] == 1:
+        n += 1
+       
+    if side > 0 and num[i - c] == 1:
+        n += 1
+       
+    if side > 0 and down < c - 1 and num[i - c + 1] == 1:
+        n += 1
+       
+    if down > 0 and num[i - 1] == 1:
+        n += 1
+       
+    if down < c - 1 and num[i + 1] == 1:
+        n += 1
+
+    if side < c - 1 and down > 0 and num[i + c - 1] == 1:
+        n += 1
+
+    if side < c - 1 and num[i + c] == 1:
+        n += 1
+
+    if side < c - 1 and down < c - 1 and num[i + c + 1] == 1:
+        n += 1
+
+    return n
+
+def board(c):
+    for i in range(1,(c**2)+1):
+        if i%c!=0:
+            print(list_one[i-1],end='')
+        else:
+            print(list_one[i-1])
+numbers(9)
+board(9)
