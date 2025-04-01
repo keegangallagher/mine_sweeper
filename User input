@@ -1,0 +1,43 @@
+def is_row(x):#checks if the row input is valid 
+    if x in ('1','2','3','4','5','6','7','8','9'):
+        return True
+    else:
+        return False
+def is_coloum(x):#checks if the coloum input is valid 
+    if x.upper() in ('A','B','C','D','E','F','G','H','I'):#This will have to depend of board_size so we should figure out how big 
+        return True
+    else:
+        return False
+def is_action(x):#checks if the action input is valid 
+    if x.upper() in ("F","O"):#if they put an f here we can add a flag to this spot on the board, for now if they put an O we can take it as a click on that spot 
+        return True
+    else:
+        return False
+
+def user():#prompts user for what position they want to use next, returns the inndex value of that spot on the board
+    n=0
+    while n==0:
+        row=input("row: ")
+        if is_row(row):
+            row=int(row)
+            coloum=input('coloum: ')
+            if is_coloum(coloum):
+                action=input('action: ')
+                if is_action(action):
+                    n+=1
+                else:
+                    print("Bad input")
+            else:
+                print("Bad input")
+        else:
+            print("Bad input")
+    letters=['A','B','C','D','E','F','G','H','I']
+    board_size=9
+    col=letters.index(coloum.upper())
+    index=(((row-1)*board_size)+col)
+    return(index)
+numbers(9)
+board(9)
+print(list_one[user()])#this was just so I could test to see if it was getting the right index values out of list_one
+#once more is coded I will loop this so that they can keep putting in new positions on the board 
+#also I need to add the actual interaction with the board but this will need a second list showing what the user sees created first 
