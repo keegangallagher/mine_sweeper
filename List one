@@ -10,7 +10,7 @@ def bombs(board_size): #all this does is randomly assign bombs to the place hold
         else:
             num.append(0)
        
-def numbers():# This takes the place holder list and checks it for where the bombs are and then counts those up so that it displays how many bombs are adjacent to each tile. Values are B,1,2,3,4,5,6,7,8,9
+def numbers(board_size):# This takes the place holder list and checks it for where the bombs are and then counts those up so that it displays how many bombs are adjacent to each tile. Values are B,1,2,3,4,5,6,7,8,9
     bombs(board_size)
     for i in range(0,(board_size**2)):
         if num[i]==1:
