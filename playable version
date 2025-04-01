@@ -1,0 +1,154 @@
+import random          
+num=[] #just a place holder list before we make the real one 
+list_one=[] #This is the list that shows us where the bombs are and has the numbers telling us how many bombs there are in adjacent squares
+global board_size
+board_size=9#this controls board size we can change it to  whateer we want 
+user_list=[] #this is the list the user will see, thats why I added all the x's, they should have all the tiles coverd up when they start 
+for i in range(1,board_size**2+1):
+    user_list.append('x')
+global game #game is just a varible that will keep our while loop running, once we add one to game-when they hit a bomb, the while loop will stop going 
+game=0
+
+def bombs(board_size): #all this does is randomly assign bombs to the place holder list 
+    while len(num)<board_size**2:
+        x=random.randint(1,10)
+        if x==1:
+            num.append(1)
+        else:
+            num.append(0)
+       
+def numbers(board_size):# This takes the place holder list and checks it for where the bombs are and then counts those up so that it displays how many bombs are adjacent to each tile. Values are B,1,2,3,4,5,6,7,8,9
+    bombs(board_size)
+    for i in range(0,(board_size**2)):
+        if num[i]==1:
+            list_one.append('B')
+        else:
+            n=check(i,board_size)
+            list_one.append(n)
+def check(i,board_size):
+    n = 0 #counter of how many bombs are adjacent 
+    side = i //board_size  #rest of this function is just checking each position around the given tile 
+    down = i % board_size
+    if side > 0 and down > 0 and num[i - board_size - 1] == 1:
+        n += 1
+       
+    if side > 0 and num[i - board_size] == 1:
+        n += 1
+       
+    if side > 0 and down < board_size - 1 and num[i - board_size + 1] == 1:
+        n += 1
+       
+    if down > 0 and num[i - 1] == 1:
+        n += 1
+       
+    if down < board_size - 1 and num[i + 1] == 1:
+        n += 1
+
+    if side < board_size - 1 and down > 0 and num[i + board_size - 1] == 1:
+        n += 1
+
+    if side < board_size - 1 and num[i + board_size] == 1:
+        n += 1
+
+    if side < board_size - 1 and down < board_size - 1 and num[i + board_size + 1] == 1:
+        n += 1
+
+    return n
+
+def board_one(board_size): #This is just to show how the list looks in a grid,#this is just for testing to make sure everything is running propperly. We will take it out for the real game
+    for i in range(1,(board_size**2)+1):
+        if i%board_size!=0:
+            print(list_one[i-1],end='')
+        else:
+            print(list_one[i-1])
+        
+def is_row(x):#checks if the row input is valid 
+    if x in ('1','2','3','4','5','6','7','8','9'):
+        return True
+    else:
+        return False
+def is_coloum(x):#checks if the coloum input is valid 
+    if x.upper() in ('A','B','C','D','E','F','G','H','I'):#This will have to depend of board_size so we should figure out how big 
+        return True
+    else:
+        return False
+def is_action(x):#checks if the action input is valid 
+    if x.upper() in ("F","O"):#if they put an f here we can add a flag to this spot on the board, for now if they put an O we can take it as a click on that spot 
+        return True
+    else:
+        return False
+
+def user():#prompts user for what position they want to use next, returns the inndex value of that spot on the board
+    n=0
+    while n==0:
+        row=input("row: ")
+        if is_row(row):
+            row=int(row)
+            coloum=input('coloum: ')
+            if is_coloum(coloum):
+                action=input('action: ')
+                if is_action(action):
+                    n+=1
+                else:
+                    print("Bad input")
+            else:
+                print("Bad input")
+        else:
+            print("Bad input")
+    letters=['A','B','C','D','E','F','G','H','I']
+    global game
+    game=0
+    col=letters.index(coloum.upper())
+    index=(((row-1)*board_size)+col)
+    if action.upper()=='F':#this part here is the flag function of the game 
+        user_list[index]='F'
+    if action.upper()=='O':#this either replaces the value in the user list with the same one from the offical list telling the user how many bombs in area or if the user chooses a space with a bomb it will end the game 
+        if list_one[index]=='B':
+            print("GAME OVER")
+            print("you hit a bomb")
+            game+=1
+        else:
+            area(index,board_size)
+            user_list[index]=list_one[index]
+
+def area(i,board_size):
+    side = i //board_size  #rest of this function is just checking each position around the given tile 
+    down = i % board_size
+    if side > 0 and down > 0 and list_one[i - board_size - 1] != "B":
+        user_list[i - board_size - 1]=list_one[i - board_size - 1]
+       
+    if side > 0 and list_one[i - board_size] != "B":
+        user_list[i - board_size]=list_one[i - board_size]
+       
+    if side > 0 and down < board_size - 1 and list_one[i - board_size + 1] != "B":
+        user_list[i - board_size + 1]=list_one[i - board_size + 1]
+       
+    if down > 0 and list_one[i - 1] != "B":
+        user_list[i - 1]=list_one[i - 1]
+       
+    if down < board_size - 1 and list_one[i + 1] != "B":
+        user_list[i + 1]=list_one[i + 1]
+
+    if side < board_size - 1 and down > 0 and list_one[i + board_size - 1] != "B":
+        user_list[i + board_size - 1]=list_one[i + board_size - 1]
+
+    if side < board_size - 1 and list_one[i + board_size] != "B":
+        user_list[i + board_size]=list_one[i + board_size]
+
+    if side < board_size - 1 and down < board_size - 1 and list_one[i + board_size + 1] != "B":
+        user_list[i + board_size + 1]=list_one[i + board_size + 1]
+        
+    
+def board_two(board_size): #This is what the user will see and is what needs to be changed when we make our actual board.
+    for i in range(1,(board_size**2)+1):
+        if i%board_size!=0:
+            print(user_list[i-1],end='')
+        else:
+            print(user_list[i-1])
+def main():
+    numbers(board_size)
+    board_one(board_size) #this is just for testing to make sure everything is running propperly. We will take it out for the real game
+    while game==0:
+        board_two(board_size)
+        user()
+main()
