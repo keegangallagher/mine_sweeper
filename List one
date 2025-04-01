@@ -1,8 +1,8 @@
 import random          
-num=[]
-list_one=[]
+num=[] #just a place holder list before we make the real one 
+list_one=[] #This is the list that shows us where the bombs are and has the numbers telling us how many bombs there are in adjacent squares 
 
-def bombs(c):
+def bombs(c): #all this does is randomly assign bombs to the place holder list 
     while len(num)<c**2:
         x=random.randint(1,6)
         if x==1:
@@ -10,7 +10,7 @@ def bombs(c):
         else:
             num.append(0)
        
-def numbers(c):
+def numbers(c):# This takes the place holder list and checks it for where the bombs are and then counts those up so that it displays how many bombs are adjacent to each tile. Values are B,1,2,3,4,5,6,7,8,9
     bombs(c)
     for i in range(0,(c**2)):
         if num[i]==1:
@@ -19,8 +19,8 @@ def numbers(c):
             n=check(i,c)
             list_one.append(n)
 def check(i,c):
-    n = 0
-    side = i // c
+    n = 0 #counter of how many bombs are adjacent 
+    side = i // c #rest of this function is just checking each position around the given tile 
     down = i % c
     if side > 0 and down > 0 and num[i - c - 1] == 1:
         n += 1
@@ -48,11 +48,11 @@ def check(i,c):
 
     return n
 
-def board(c):
+def board(c): #This is just to show how the list looks in a grid
     for i in range(1,(c**2)+1):
         if i%c!=0:
             print(list_one[i-1],end='')
         else:
             print(list_one[i-1])
-numbers(9)
+numbers(9)#9 is just a constant it will work with any size we want 
 board(9)
