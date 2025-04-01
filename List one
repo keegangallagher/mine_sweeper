@@ -54,5 +54,5 @@ def board(board_size): #This is just to show how the list looks in a grid
             print(list_one[i-1],end='')
         else:
             print(list_one[i-1])
-numbers(9)#9 is just a constant it will work with any size we want 
+numbers(9)#9 is just a constant it will work with any size we want I think we should use variable board_size for this and declare it as a global variable 
 board(9)
