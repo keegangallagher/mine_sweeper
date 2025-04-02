@@ -1,0 +1,18 @@
+This will be a check list for things that we need to complete for the project. As you find things to add, add them in this list with a description of what the change would look like. Add and remove items as problems are solved / encountered. Add your name next to whatever youre planning to work on. 
+
+***List is not in order of urgency.***
+
+
+1. Clearing out non-bomb effected space (LUKE)
+    - Right now, when you clear out a space of 0's, It only clears the space directly around the users inputted point.
+
+2. Grid for user input
+    - Have a x,y grid to show the user exactly where their input will go
+
+3. Different modes 
+    - Add different difficulties (board size and bomb amount)
+
+4. Add win condition 
+    - once board is cleared completely, finish game.
+
+
