@@ -1,21 +1,26 @@
 import random          
-num=[] #just a place holder list before we make the real one 
-list_one=[] #This is the list that shows us where the bombs are and has the numbers telling us how many bombs there are in adjacent squares
 global board_size
 board_size=9#this controls board size we can change it to  whateer we want 
+global game #game is just a varible that will keep our while loop running, once we add one to game-when they hit a bomb, the while loop will stop going 
+game=0
+global bombs
+numbombs=9
+
+num=[] #just a place holder list before we make the real one 
+list_one=[] #This is the list that shows us where the bombs are and has the numbers telling us how many bombs there are in adjacent squares
 user_list=[] #this is the list the user will see, thats why I added all the x's, they should have all the tiles coverd up when they start 
 for i in range(1,board_size**2+1):
     user_list.append('x')
-global game #game is just a varible that will keep our while loop running, once we add one to game-when they hit a bomb, the while loop will stop going 
-game=0
-
+    
 def bombs(board_size): #all this does is randomly assign bombs to the place holder list 
-    while len(num)<board_size**2:
-        x=random.randint(1,10)
-        if x==1:
-            num.append(1)
-        else:
-            num.append(0)
+    for i in range(1,board_size**2+1):
+        num.append(0)
+    bcheck=0
+    while bcheck<numbombs:
+        x=random.randint(0,(board_size**2)-1)
+        if num[x] != 1:
+            num[x]=1
+            bcheck+=1
        
 def numbers(board_size):# This takes the place holder list and checks it for where the bombs are and then counts those up so that it displays how many bombs are adjacent to each tile. Values are B,1,2,3,4,5,6,7,8,9
     bombs(board_size)
