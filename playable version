@@ -58,7 +58,7 @@ def check(i,board_size):
 def board_one(board_size): #This is just to show how the list looks in a grid,#this is just for testing to make sure everything is running propperly. We will take it out for the real game
     for i in range(1,(board_size**2)+1):
         if i%board_size!=0:
-            print(list_one[i-1],end='')
+            print(list_one[i-1],' ',end='')
         else:
             print(list_one[i-1])
         
@@ -142,7 +142,7 @@ def area(i,board_size):
 def board_two(board_size): #This is what the user will see and is what needs to be changed when we make our actual board.
     for i in range(1,(board_size**2)+1):
         if i%board_size!=0:
-            print(user_list[i-1],end='')
+            print(user_list[i-1],' ',end='')
         else:
             print(user_list[i-1])
 def main():
