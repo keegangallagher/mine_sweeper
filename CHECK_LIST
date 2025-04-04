@@ -3,7 +3,7 @@ This will be a check list for things that we need to complete for the project. A
 ***List is not in order of urgency.***
 
 
-1. Clearing out non-bomb effected space (LUKE)
+1. Clearing out non-bomb effected space (LUKE) DONE
     - Right now, when you clear out a space of 0's, It only clears the space directly around the users inputted point.
 
 2. Grid for user input
@@ -12,7 +12,7 @@ This will be a check list for things that we need to complete for the project. A
 3. Different modes 
     - Add different difficulties (board size and bomb amount)
 
-4. Add win condition 
+4. Add win condition DONE
     - once board is cleared completely, finish game.
 
 
