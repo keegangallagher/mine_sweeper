@@ -2,18 +2,9 @@ This will be a check list for things that we need to complete for the project. A
 
 ***List is not in order of urgency.***
 
-
-1. Clearing out non-bomb effected space (LUKE) DONE
-    - Right now, when you clear out a space of 0's, It only clears the space directly around the users inputted point.
-
-2. Grid for user input DONE
-    - Have a x,y grid to show the user exactly where their input will go
-
-3. Different modes 
+1. Different modes 
     - Add different difficulties (board size and bomb amount)
     Can easily change board size and number of bombs to create diffrent dificulty modes, only thing that will need to be manualy changed are the letters in the user function and the letters in the board_two function 
-
-4. Add win condition DONE
-    - once board is cleared completely, finish game.
+2. one input instead of 3 could be better cause right now you have to hit enter 3 times, might be better to put in input like 3 b f that way its quicker and easier 
 
 
