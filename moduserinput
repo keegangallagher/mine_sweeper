@@ -1,0 +1,54 @@
+def user():
+    global game, numbombs
+    letters = ['A','B','C','D','E','F','G','H','I'] 
+    
+    while True:
+        inp = input("Enter number letter action (e.g., 3 C F): ").split()
+
+        if len(inp) != 3:
+            print("Wrong input! Format: number letter action")
+            continue
+
+        row, col_letter, action = inp
+
+        # Validate row
+        if not is_row(row):
+            print("Invalid row! Must be 1-9.")
+            continue
+        row = int(row)
+
+        # Validate column
+        if not is_coloum(col_letter):
+            print("Invalid column! Must be A-I.")
+            continue
+        col = letters.index(col_letter.upper())
+
+        # Validate action
+        if not is_action(action):
+            print("Invalid action! Use 'F' to flag or 'O' to open.")
+            continue
+
+        # Index calculation
+        index = ((row - 1) * board_size) + col
+
+        # Action handling
+        if action.upper() == 'F':
+            if user_list[index] == 'x' and numbombs > 0:
+                user_list[index] = 'F'
+                numbombs -= 1
+                break
+            elif user_list[index] == 'F':
+                user_list[index] = 'x'
+                numbombs += 1
+                break
+            else:
+                print("Out of flags or invalid flagging attempt.")
+        elif action.upper() == 'O':
+            if list_one[index] == 'B':
+                print("GAME OVER - You hit a bomb!")
+                game += 1
+                break
+            else:
+                area(index, board_size)
+                user_list[index] = list_one[index]
+                break
