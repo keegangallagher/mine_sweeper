@@ -12,21 +12,23 @@
 import random          
 #this controls board size we can change it to  whateer we want  
 game=0#game is just a varible that will keep our while loop running, once we add one to game-when they hit a bomb, the while loop will stop going 
-numbombs=5
+
 
 def game_setup():
     board_size_selector = ""
-    while board_size_selector not in ["small", "medium", "large"]:
+    while board_size_selector not in ["small", "medium", "large"]: #loop until user gives a valid input
         board_size_selector = input("Select board size - Small, Medium, or Large: ").lower()
         if board_size_selector not in ["small", "medium", "large"]:
             print("ERROR: invalid size")
 
-    if board_size_selector.lower() == "small":
+    if board_size_selector.lower() == "small": #here you input one of the following and there is a int size and bomb number corresponding
         board_size = 9
+        numbombs = 10
     elif board_size_selector == 'medium':
         board_size = 16
+        numbombs = 40
     elif board_size_selector == 'large':
-        board_size = 30
+        board_size = 99
     else:
         print("ERROR: invalid size")
         board_size_selector = input("Select board size: Small, Medium, or Large: ").lower
@@ -34,17 +36,13 @@ def game_setup():
     
     num=[] #just a place holder list before we make the real one 
     list_one=[] #This is the list that shows us where the bombs are and has the numbers telling us how many bombs there are in adjacent squares
-    user_list = ['x'] * (board_size ** 2) #this is the list the user will see, thats why I added all the x's, they should have all the tiles coverd up when they start 
+    user_list = ['x'] * ((board_size * board_size) + 1) #this is the list the user will see, thats why I added all the x's, they should have all the tiles coverd up when they start 
     zero_list=[]
 
-    return num, list_one, user_list, zero_list, board_size
+    return num, list_one, user_list, zero_list, board_size, numbombs
 
-#def find_zeros():
-    #global zero_list
-    #zero_list=[i for i, x in enumerate(list_one) if x == 0]
-    
 
-def bombs(board_size, num_bombs): #all this does is randomly assign bombs to the place holder list 
+def bombs(board_size, numbombs): #all this does is randomly assign bombs to the place holder list 
     num = [0] * (board_size ** 2)
     for i in range(1,board_size**2+1):
         num.append(0)
@@ -100,7 +98,7 @@ def check(i, board_size, num):
 
     return n
 
-def board_one(board_size): #This is just to show how the list looks in a grid,#this is just for testing to make sure everything is running propperly. We will take it out for the real game
+def board_one(board_size, list_one): #This is just to show how the list looks in a grid,#this is just for testing to make sure everything is running propperly. We will take it out for the real game
     for i in range(1,(board_size**2)+1):
         if i%board_size!=0:
             print(list_one[i-1],' ',end='')
@@ -123,14 +121,16 @@ def is_action(x):#checks if the action input is valid
     else:
         return False
 
-def user():#prompts user for what position they want to use next, returns the inndex value of that spot on the board
-    global game, numbombs
+def user(board_size, user_list, list_one):#prompts user for what position they want to use next, returns the inndex value of that spot on the board
+    global game, numbombs                   #We are going to have to change the checks. I turned the letters into numbers because
+                                            #there arent enough letters for anything bigger than 26 size.
+                                            #I think the nre prompt should be like "enter your coordinate(x/y): "
     n=0
     while n==0:
-        row=input("number: ")
+        row=input("Side number: ")
         if is_row(row):
             row=int(row)
-            coloum=input('letter: ')
+            coloum=input('Top Number: ')
             if is_coloum(coloum):
                 action=input('action: ')
                 if is_action(action):
@@ -165,7 +165,7 @@ def user():#prompts user for what position they want to use next, returns the in
             area(index,board_size)
             user_list[index]=list_one[index]
 
-def area(i, board_size, user_list, zero_list, list_one):
+def area(i, board_size, user_list, zero_list, list_one): #updated for adjustability
     if i in zero_list:
         zero_list.remove(i)
     side = i // board_size
@@ -210,12 +210,12 @@ def area(i, board_size, user_list, zero_list, list_one):
             area(i + board_size + 1, board_size, user_list, zero_list, list_one)
         user_list[i + board_size + 1] = list_one[i + board_size + 1]
         
-def board_two(board_size, user_list): #This is what the user will see and is what needs to be changed when we make our actual board.
+def board_two(board_size, user_list): #This is what the user will see Changed by Keegan as of 4.7.2025
     print("    ", end="")
 
     #makes top or x-axis
     for i in range(1, board_size + 1):
-        print(f" {i} ", end = "")
+        print(f"  {i} ", end = "")
     print()
 
     print("   ", "----" * board_size )
@@ -228,7 +228,7 @@ def board_two(board_size, user_list): #This is what the user will see and is wha
             index = ((i - 1) * board_size) + j
             print(f" {user_list[index]} |", end="")
         print()
-        print("   ", "-----" * board_size )
+        print("   ", "----" * board_size )
 
 def minesweeper_text(): #loads the "game intro" that is the word minesweeper and doesnt start until given input
     print("  __  __ _")
@@ -243,29 +243,35 @@ def minesweeper_text(): #loads the "game intro" that is the word minesweeper and
 
 
 def minesweeper_rules():
-    print("Minesweeper Rules-")
-    print("there are", numbombs, "bombs hidden on the board.")
-    print("input a number and a letter to select your tile in relation to the coordinate of the tile.")
-    print("input an O for action if you think it's not a bomb or an F if you think it is.")
+    print("--------------------------------Minesweeper Rules-----------------------------------------------")
+    print("there arebombs hidden on the board. You must find and flag them all.")
+    print()
+    print("Input a number and a letter to select your tile in relation to the coordinate of the tile.")
+    print("Next, input an O for action if you think it's not a bomb or an F if you think it is.")
+    print()
     print("If you input an o on a bomb you will lose, if there is not a bomb the tile will reveal a number.")
     print("The number corresponds to the amound of bombs in the six tiles adjacent to the number.")
-    print("The flag is a way to mark where believed bombs are to help solve the puzzle.")
-    print("Use the numbers and flags to select all tiles that are not a bomb.")
+    print("The flag is a way to mark where believed bombs are to solve the puzzle.")
+    print("Use all yout flags correctly to win!")
+    print("------------------------------------------------------------------------------------------------")
     print()
 
 
 def main():
     global game
     
-    minesweeper_text()
-    num, list_one, user_list, zero_list, board_size = game_setup()
-    list_one, zero_list = numbers(board_size, numbombs)
-    print(num, board_size)
-    minesweeper_rules()
+    minesweeper_text() #intro text graphic
+
+    num, list_one, user_list, zero_list, board_size, numbombs = game_setup() #the game setup gives all of these variables
+
+    list_one, zero_list = numbers(board_size, numbombs) 
+
+    minesweeper_rules() #print how to play
+
     while game==0:
         board_two(board_size, user_list)
         print('you have',numbombs,'flags left')
-        user()
+        user(board_size, user_list, list_one)
         flags_check=[i for i, x in enumerate(user_list) if x == 'F']
         bombs_check=[i for i, x in enumerate(list_one) if x == 'B']
         if flags_check==bombs_check:
