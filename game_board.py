@@ -199,7 +199,7 @@ def board_two(board_size): #This is what the user will see and is what needs to 
             else:
                 print(user_list[(board_size*(i-1))+a],' ',end='')
 
-def minesweeper_text():
+def minesweeper_text(): #loads the "game intro" that is the word minesweeper and doesnt start until given input
     start_game = ""
     while start_game == "":
         print("  __  __ _")
@@ -212,16 +212,24 @@ def minesweeper_text():
         print("                                            |_|              ")
         print()
         start_game = input("Press The Enter Key to Start: ")
-    return
+    return #returns when user presses enter
+
+def minesweeper_rules():
+    print("Minesweeper Rules-")
+    print("there are", numbombs, "bombs hidden on the board.")
+    print("input a number and a letter to select your tile in relation to the coordinate of the tile.")
+    print("input an O for action if you think it's not a bomb or an F if you think it is.")
+    print("If you input an o on a bomb you will lose, if there is not a bomb the tile will reveal a number.")
+    print("The number corresponds to the amound of bombs in the six tiles adjacent to the number.")
+    print("The flag is a way to mark where believed bombs are to help solve the puzzle.")
+    print("Use the numbers and flags to select all tiles that are not a bomb.")
 
 
 def main():
     global game
     numbers(board_size)
     minesweeper_text()
-    print("Rules-")
-    print("input a number and a letter to select your tile")
-    print("input an O for action if you think it's not a bomb or an F if you hink it is")
+    minesweeper_rules()
     while game==0:
         board_two(board_size)
         print('you have',numbombs,'flags left')
