@@ -10,22 +10,42 @@
 #we plan to have a list generated with all the bomb locations and then a second list which is whats been revealed and where the user wants flags
 
 import random          
-board_size=9#this controls board size we can change it to  whateer we want  
+#this controls board size we can change it to  whateer we want  
 game=0#game is just a varible that will keep our while loop running, once we add one to game-when they hit a bomb, the while loop will stop going 
 numbombs=5
 
-num=[] #just a place holder list before we make the real one 
-list_one=[] #This is the list that shows us where the bombs are and has the numbers telling us how many bombs there are in adjacent squares
-user_list = ['x'] * (board_size ** 2) #this is the list the user will see, thats why I added all the x's, they should have all the tiles coverd up when they start 
-zero_list=[]
+def game_setup():
+    board_size_selector = ""
+    while board_size_selector not in ["small", "medium", "large"]:
+        board_size_selector = input("Select board size - Small, Medium, or Large: ").lower()
+        if board_size_selector not in ["small", "medium", "large"]:
+            print("ERROR: invalid size")
 
-def find_zeros():
-    global zero_list
-    zero_list=[i for i, x in enumerate(list_one) if x == 0]
+    if board_size_selector.lower() == "small":
+        board_size = 9
+    elif board_size_selector == 'medium':
+        board_size = 16
+    elif board_size_selector == 'large':
+        board_size = 30
+    else:
+        print("ERROR: invalid size")
+        board_size_selector = input("Select board size: Small, Medium, or Large: ").lower
+
+    
+    num=[] #just a place holder list before we make the real one 
+    list_one=[] #This is the list that shows us where the bombs are and has the numbers telling us how many bombs there are in adjacent squares
+    user_list = ['x'] * (board_size ** 2) #this is the list the user will see, thats why I added all the x's, they should have all the tiles coverd up when they start 
+    zero_list=[]
+
+    return num, list_one, user_list, zero_list, board_size
+
+#def find_zeros():
+    #global zero_list
+    #zero_list=[i for i, x in enumerate(list_one) if x == 0]
     
 
-def bombs(board_size): #all this does is randomly assign bombs to the place holder list 
-    global num
+def bombs(board_size, num_bombs): #all this does is randomly assign bombs to the place holder list 
+    num = [0] * (board_size ** 2)
     for i in range(1,board_size**2+1):
         num.append(0)
     bcheck=0
@@ -34,19 +54,23 @@ def bombs(board_size): #all this does is randomly assign bombs to the place hold
         if num[x] != 1:
             num[x]=1
             bcheck+=1
+    
+    return num
        
-def numbers(board_size):# This takes the place holder list and checks it for where the bombs are and then counts those up so that it displays how many bombs are adjacent to each tile. Values are B,1,2,3,4,5,6,7,8,9
-    global list_one
-    bombs(board_size)
+def numbers(board_size, numbombs):# This takes the place holder list and checks it for where the bombs are and then counts those up so that it displays how many bombs are adjacent to each tile. Values are B,1,2,3,4,5,6,7,8,9
+    num = bombs(board_size, numbombs)
+    list_one = []
     for i in range(0,(board_size**2)):
         if num[i]==1:
             list_one.append('B')
         else:
-            n=check(i,board_size)
+            n=check(i, board_size, num)
             list_one.append(n)
-    find_zeros()
+    zero_list = [i for i, x in enumerate(list_one) if x == 0]
 
-def check(i,board_size):
+    return list_one, zero_list
+
+def check(i, board_size, num):
     n = 0 #counter of how many bombs are adjacent 
     side = i //board_size  #rest of this function is just checking each position around the given tile 
     down = i % board_size
@@ -141,78 +165,82 @@ def user():#prompts user for what position they want to use next, returns the in
             area(index,board_size)
             user_list[index]=list_one[index]
 
-def area(i,board_size):
-    global user_list
-    global zero_list
+def area(i, board_size, user_list, zero_list, list_one):
     if i in zero_list:
         zero_list.remove(i)
-    side = i //board_size  #rest of this function is just checking each position around the given tile 
+    side = i // board_size
     down = i % board_size
     if side > 0 and down > 0 and list_one[i - board_size - 1] != "B":
         if (i - board_size - 1) in zero_list:
-            area(i - board_size - 1,board_size)
-        user_list[i - board_size - 1]=list_one[i - board_size - 1]
-       
+            area(i - board_size - 1, board_size, user_list, zero_list, list_one)
+        user_list[i - board_size - 1] = list_one[i - board_size - 1]
+
     if side > 0 and list_one[i - board_size] != "B":
         if (i - board_size) in zero_list:
-            area(i - board_size,board_size)
-        user_list[i - board_size]=list_one[i - board_size]
-       
+            area(i - board_size, board_size, user_list, zero_list, list_one)
+        user_list[i - board_size] = list_one[i - board_size]
+
     if side > 0 and down < board_size - 1 and list_one[i - board_size + 1] != "B":
         if (i - board_size + 1) in zero_list:
-            area(i - board_size+1,board_size)
-        user_list[i - board_size + 1]=list_one[i - board_size + 1]
-       
+            area(i - board_size + 1, board_size, user_list, zero_list, list_one)
+        user_list[i - board_size + 1] = list_one[i - board_size + 1]
+
     if down > 0 and list_one[i - 1] != "B":
         if (i - 1) in zero_list:
-            area(i - 1,board_size)
-        user_list[i - 1]=list_one[i - 1]
-       
+            area(i - 1, board_size, user_list, zero_list, list_one)
+        user_list[i - 1] = list_one[i - 1]
+
     if down < board_size - 1 and list_one[i + 1] != "B":
         if (i + 1) in zero_list:
-            area(i +1,board_size)
-        user_list[i + 1]=list_one[i + 1]
+            area(i + 1, board_size, user_list, zero_list, list_one)
+        user_list[i + 1] = list_one[i + 1]
 
     if side < board_size - 1 and down > 0 and list_one[i + board_size - 1] != "B":
         if (i + board_size - 1) in zero_list:
-            area(i + board_size-1,board_size)
-        user_list[i + board_size - 1]=list_one[i + board_size - 1]
+            area(i + board_size - 1, board_size, user_list, zero_list, list_one)
+        user_list[i + board_size - 1] = list_one[i + board_size - 1]
 
     if side < board_size - 1 and list_one[i + board_size] != "B":
         if (i + board_size) in zero_list:
-            area(i + board_size,board_size)
-        user_list[i + board_size]=list_one[i + board_size]
+            area(i + board_size, board_size, user_list, zero_list, list_one)
+        user_list[i + board_size] = list_one[i + board_size]
 
     if side < board_size - 1 and down < board_size - 1 and list_one[i + board_size + 1] != "B":
         if (i + board_size + 1) in zero_list:
-            area(i + board_size+1,board_size)
-        user_list[i + board_size + 1]=list_one[i + board_size + 1]
+            area(i + board_size + 1, board_size, user_list, zero_list, list_one)
+        user_list[i + board_size + 1] = list_one[i + board_size + 1]
         
-def board_two(board_size): #This is what the user will see and is what needs to be changed when we make our actual board.
-    print("   A  B  C  D  E  F  G  H  I")
-    print("   |  |  |  |  |  |  |  |  |")
-    for i in range(1,board_size+1):
-        print(i,'-',end='')
-        for a in range(board_size):
-            if a==board_size-1:
-                print(user_list[(board_size*(i-1))+a],' ')
-            else:
-                print(user_list[(board_size*(i-1))+a],' ',end='')
+def board_two(board_size, user_list): #This is what the user will see and is what needs to be changed when we make our actual board.
+    print("    ", end="")
+
+    #makes top or x-axis
+    for i in range(1, board_size + 1):
+        print(f" {i} ", end = "")
+    print()
+
+    print("   ", "----" * board_size )
+
+    #makes side or y-axis
+    for j in range(1, board_size + 1): #numbers on the side
+        print(f" {j}  |", end="")
+
+        for i in range(1, board_size + 1):
+            index = ((i - 1) * board_size) + j
+            print(f" {user_list[index]} |", end="")
+        print()
+        print("   ", "-----" * board_size )
 
 def minesweeper_text(): #loads the "game intro" that is the word minesweeper and doesnt start until given input
-    start_game = ""
-    while start_game == "":
-        print("  __  __ _")
-        print(" |  \/  (_)")
-        print(" | \  / |_ _ __   ___  _____      _____  ___ _ __   ___ _ __")
-        print(" | |\/| | | '_ \ / _ \/ __\ \ /\ / / _ \/ _ \ '_ \ / _ \ '__|")
-        print(" | |  | | | | | |  __/\__  \ V  V /  __/  __/ |_) |  __/ |   ")
-        print(" |_|  |_|_|_| |_|\___||___/ \_/\_/ \___|\___| .__/ \___|_|   ")
-        print("                                            | |              ")
-        print("                                            |_|              ")
-        print()
-        start_game = input("type start and press the enter Key to begin: ")
-    return #returns when user presses enter
+    print("  __  __ _")
+    print(" |  \\/  (_)")
+    print(" | \\  / |_ _ __   ___  _____      _____  ___ _ __   ___ _ __")
+    print(" | |\\/| | | '_ \\ / _ \\/ __\\ \\ /\\ / / _ \\/ _ \\ '_ \\ / _ \\ '__|")
+    print(" | |  | | | | | |  __/\\__ \\\\ V  V /  __/  __/ |_) |  __/ |   ")
+    print(" |_|  |_|_|_| |_|\\___||___/ \\_/\\_/ \\___|\\___| .__/ \\___|_|   ")
+    print("                                            | |              ")
+    print("                                            |_|              ")
+    print()
+
 
 def minesweeper_rules():
     print("Minesweeper Rules-")
@@ -223,15 +251,19 @@ def minesweeper_rules():
     print("The number corresponds to the amound of bombs in the six tiles adjacent to the number.")
     print("The flag is a way to mark where believed bombs are to help solve the puzzle.")
     print("Use the numbers and flags to select all tiles that are not a bomb.")
+    print()
 
 
 def main():
     global game
-    numbers(board_size)
+    
     minesweeper_text()
+    num, list_one, user_list, zero_list, board_size = game_setup()
+    list_one, zero_list = numbers(board_size, numbombs)
+    print(num, board_size)
     minesweeper_rules()
     while game==0:
-        board_two(board_size)
+        board_two(board_size, user_list)
         print('you have',numbombs,'flags left')
         user()
         flags_check=[i for i, x in enumerate(user_list) if x == 'F']
