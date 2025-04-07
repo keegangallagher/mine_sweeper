@@ -9,4 +9,11 @@ This will be a check list for things that we need to complete for the project. A
 2. one input instead of 3 could be better cause right now you have to hit enter 3 times, might be better to put in input like 3 b f that way its quicker and easier 
     -doing this would just take looking at the user function and changeing the top part of it a little so that it's one input and it uses the split function to then get the three values that it checks. the rest of that function should be uninfluenced 
 
+3. Board design
+    I think we could do some things to make the board easier to see and understand, maybe we could space the board more or even
+    color code numbers or flags to help ease of use. 
+
+4. How the game ends and bomb number.
+    As of now the game ends if you flag all the bombs but maybe we should make the game end once every tile that isnt a bomb
+    is selected, the game ends, like normal minesweeper.
 

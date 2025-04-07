@@ -211,7 +211,7 @@ def minesweeper_text(): #loads the "game intro" that is the word minesweeper and
         print("                                            | |              ")
         print("                                            |_|              ")
         print()
-        start_game = input("Press The Enter Key to Start: ")
+        start_game = input("type start and press the enter Key to begin: ")
     return #returns when user presses enter
 
 def minesweeper_rules():
