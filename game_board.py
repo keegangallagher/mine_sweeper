@@ -18,8 +18,6 @@ def game_setup():
     board_size_selector = ""
     while board_size_selector not in ["small", "medium", "large"]: #loop until user gives a valid input
         board_size_selector = input("Select board size - Small, Medium, or Large: ").lower()
-        if board_size_selector not in ["small", "medium", "large"]:
-            print("ERROR: invalid size")
 
     if board_size_selector.lower() == "small": #here you input one of the following and there is a int size and bomb number corresponding
         board_size = 9
