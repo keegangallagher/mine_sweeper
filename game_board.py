@@ -26,7 +26,8 @@ def game_setup():
         board_size = 16
         numbombs = 40
     elif board_size_selector == 'large':
-        board_size = 99
+        board_size = 30
+        numbombs = 60
     else:
         print("ERROR: invalid size")
         board_size_selector = input("Select board size: Small, Medium, or Large: ").lower
