@@ -95,9 +95,9 @@ def check(i,board_size):
         n += 1
 
     return n
+
 def user():
     global game, numbombs
-
 
     while True:
         inp = input("Enter number letter action (e.g., 3 C F): ").split()
@@ -214,7 +214,7 @@ def area(i,board_size):
         
 def board_two(board_size): #This is what the user will see and is what needs to be changed when we make our actual board.
     #printing the letters at the top of the grid
-    print(" ", end="")
+    print("  ", end="")
     index = 0
     while index <= (len(letters)-1):
         if index == (len(letters)-1):
@@ -225,7 +225,7 @@ def board_two(board_size): #This is what the user will see and is what needs to 
             index += 1
     index = 0
     #printing the lines for the letters in the grid
-    print(" ", end="")
+    print("  ", end="")
     while index <= (len(letters)-1):
         if index == (len(letters)-1):
             print("  |",sep="")
@@ -236,9 +236,9 @@ def board_two(board_size): #This is what the user will see and is what needs to 
         
     for i in range(1,board_size+1):
         if i >= 10:
-            print(i,"-",sep="",end="")
+            print(i,"- ",sep="",end="")
         else:
-            print(i,'-',end='')
+            print(i,'- ',end='')
 
         for a in range(board_size):
             if a==board_size-1:
