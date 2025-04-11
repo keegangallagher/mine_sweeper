@@ -18,7 +18,7 @@ def set_difficulty():
         choice = input("Enter difficulty (easy/medium/hard): ").lower()
         if choice == "easy":
             board_size = 9
-            numbombs = 3
+            numbombs = 12
             letters = letters[0:9]
             grid_row_nums = grid_row_nums[0:9]
             break
