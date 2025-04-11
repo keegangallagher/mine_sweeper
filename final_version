@@ -217,39 +217,51 @@ def area(i,board_size):
             area(i + board_size+1,board_size)
         user_list[i + board_size + 1]=list_one[i + board_size + 1]
         
-def board_two(board_size): #This is what the user will see and is what needs to be changed when we make our actual board.
-    #printing the letters at the top of the grid
-    print("  ", end="")
-    index = 0
-    while index <= (len(letters)-1):
-        if index == (len(letters)-1):
-            print("  ",letters[index],sep="")
-            index += 1
-        else:
-            print("  ",letters[index],sep="",end="")
-            index += 1
-    index = 0
-    #printing the lines for the letters in the grid
-    print("  ", end="")
-    while index <= (len(letters)-1):
-        if index == (len(letters)-1):
-            print("  |",sep="")
-            index += 1
-        else:
-            print("  |",sep="",end="")
-            index += 1
-        
-    for i in range(1,board_size+1):
-        if i >= 10:
-            print(i,"- ",sep="",end="")
-        else:
-            print(i,'- ',end='')
+def colorize(value):
+    colors = {
+    "0": "\033[30m",     # Black
+    "1": "\033[94m",     # Blue
+    "2": "\033[92m",     # Green
+    "3": "\033[93m",     # Yellow
+    "4": "\033[95m",     # Magenta
+    "5": "\033[96m",     # Cyan
+    "6": "\033[91m",     # Red
+    "7": "\033[93;1m",   # Bright Yellow
+    "8": "\033[94;1m",   # Bright Blue
+    "F": "\033[91;1m",   # Bright Red
+    "B": "\033[91m",     # Red for bombs if shown (like game over)
+    }
+    endc = "\033[0m"  # Reset color
+    return f"{colors.get(str(value), '')}{value}{endc}" if value != 'x' else value
 
+def board_two(board_size):
+    print("  ", end="")
+    index = 0
+    while index <= (len(letters)-1):
+        if index == (len(letters)-1):
+            print("  ", letters[index], sep="")
+        else:
+            print("  ", letters[index], sep="", end="")
+        index += 1
+
+    print("  ", end="")
+    index = 0
+    while index <= (len(letters)-1):
+        if index == (len(letters)-1):
+            print("  |", sep="")
+        else:
+            print("  |", sep="", end="")
+        index += 1
+
+    for i in range(1, board_size + 1):
+        print(f"{i:2}- ", end="")  # Print row number with alignment
         for a in range(board_size):
-            if a==board_size-1:
-                print(user_list[(board_size*(i-1))+a],' ')
+            tile = user_list[(board_size * (i - 1)) + a]
+            display = colorize(str(tile))
+            if a == board_size - 1:
+                print(display, ' ')
             else:
-                print(user_list[(board_size*(i-1))+a],' ',end='')
+                print(display, ' ', end='')
 
 
 def minesweeper_text(): #loads the "game intro" that is the word minesweeper and doesnt start until given input
