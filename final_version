@@ -1,6 +1,7 @@
 import random          
 board_size=0#this controls board size we can change it to  whateer we want  
 numbombs=0 #changing to zero, both board_size and numboimbs will change based on the game mode
+num_flags = 0
 
 game=0#game is just a varible that will keep our while loop running, once we add one to game-when they hit a bomb, the while loop will stop going 
 num=[] #just a place holder list before we make the real one 
@@ -11,25 +12,25 @@ letters = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","
 grid_row_nums = ["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26"]
 
 def set_difficulty():
-    global board_size, numbombs, user_list, letters, grid_row_nums
+    global board_size, numbombs, user_list, letters, grid_row_nums, num_flags
     print("Select Difficulty: Easy, Medium, or Hard")
     while True:
         choice = input("Enter difficulty (easy/medium/hard): ").lower()
         if choice == "easy":
             board_size = 9
-            numbombs = 9
+            numbombs = 3
             letters = letters[0:9]
             grid_row_nums = grid_row_nums[0:9]
             break
         elif choice == "medium":
             board_size = 14
-            numbombs = 22
+            numbombs = 32
             letters = letters[0:14]
             grid_row_nums = grid_row_nums[0:14]
             break
         elif choice == "hard":
             board_size = 26
-            numbombs = 75
+            numbombs = 85
             letters = letters
             grid_row_nums = grid_row_nums
             break
@@ -37,6 +38,7 @@ def set_difficulty():
             print("Invalid choice. Please type easy, medium, or hard.")
 
     user_list[:] = ['x'] * (board_size ** 2)
+    num_flags = numbombs
 
 
 
@@ -97,7 +99,7 @@ def check(i,board_size):
     return n
 
 def user():
-    global game, numbombs
+    global game, numbombs, num_flags
 
     while True:
         inp = input("Enter number letter action (e.g., 3 C F): ").split()
@@ -130,16 +132,19 @@ def user():
 
         # Action handling
         if action.upper() == 'F':
-            if user_list[index] == 'x' and numbombs > 0:
-                user_list[index] = 'F'
-                numbombs -= 1
-                break
+            if user_list[index] == 'x':
+                if num_flags > 0:
+                    user_list[index] = 'F'
+                    num_flags -= 1
+                    break
+                else:
+                    print("No flags remaining!")
             elif user_list[index] == 'F':
                 user_list[index] = 'x'
-                numbombs += 1
+                num_flags += 1
                 break
             else:
-                print("Out of flags or invalid flagging attempt.")
+                print("Can't flag this tile.")
         elif action.upper() == 'O':
             if list_one[index] == 'B':
                 print("GAME OVER - You hit a bomb!")
@@ -148,7 +153,7 @@ def user():
             else:
                 area(index, board_size)
                 user_list[index] = list_one[index]
-                break        
+                break         
 def is_row(x):#checks if the row input is valid 
     if x in grid_row_nums:
         return True
@@ -288,7 +293,7 @@ def main():
     print("input an O for action if you think it's not a bomb or an F if you hink it is")
     while game==0:
         board_two(board_size)
-        print('you have',numbombs,'flags left')
+        print('you have',num_flags,'flags left')
         user()
         flags_check=[i for i, x in enumerate(user_list) if x == 'F']
         bombs_check=[i for i, x in enumerate(list_one) if x == 'B']
