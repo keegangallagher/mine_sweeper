@@ -1,17 +1,20 @@
-import random          
+import random
+# GAME CONFIGURATION VARIABLES
 board_size=0#this controls board size we can change it to  whateer we want  
-numbombs=0 #changing to zero, both board_size and numboimbs will change based on the game mode
-num_flags = 0
+numbombs=0 #of bombs, both board_size and numboimbs will change based on the game mode
+num_flags = 0 # Tracks remaining flags (matches bomb count)
 
-game=0#game is just a varible that will keep our while loop running, once we add one to game-when they hit a bomb, the while loop will stop going 
+game=0 # Game state (0=playing, 1=game over)
 num=[] #just a place holder list before we make the real one 
 list_one=[] #This is the list that shows us where the bombs are and has the numbers telling us how many bombs there are in adjacent squares
 user_list = ['x'] * (board_size ** 2) #this is the list the user will see, thats why I added all the x's, they should have all the tiles coverd up when they start 
-zero_list=[]
+zero_list=[] # Tracks all empty (0-value) spaces
+# Coordinate system labels
 letters = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"] 
 grid_row_nums = ["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26"]
 
 def set_difficulty():
+# Sets game parameters based on chosen difficulty level
     global board_size, numbombs, user_list, letters, grid_row_nums, num_flags
     print("Select Difficulty: Easy, Medium, or Hard")
     while True:
@@ -43,10 +46,11 @@ def set_difficulty():
 
 
 def find_zeros():
+# Identifies all empty (0-value) spaces on the board
     global zero_list
     zero_list=[i for i, x in enumerate(list_one) if x == 0]
 
-def bombs(board_size): #all this does is randomly assign bombs to the place holder list 
+def bombs(board_size): # Randomly places bombs on the game board
     global num
     for i in range(1, board_size**2+1):
         num.append(0)
@@ -57,7 +61,7 @@ def bombs(board_size): #all this does is randomly assign bombs to the place hold
             num[x]=1
             bcheck+=1
        
-def numbers(board_size):# This takes the place holder list and checks it for where the bombs are and then counts those up so that it displays how many bombs are adjacent to each tile. Values are B,1,2,3,4,5,6,7,8,9
+def numbers(board_size): # Generates complete game board with bombs and adjacent numbers
     global list_one
     bombs(board_size)
     for i in range(0,(board_size**2)):
@@ -68,10 +72,11 @@ def numbers(board_size):# This takes the place holder list and checks it for whe
             list_one.append(n)
     find_zeros()
 
-def check(i,board_size):
+def check(i,board_size): # Counts adjacent bombs for a given position
     n = 0 #counter of how many bombs are adjacent 
     side = i //board_size  #rest of this function is just checking each position around the given tile 
     down = i % board_size
+# Check all 8 adjacent positions for bombs
     if side > 0 and down > 0 and num[i - board_size - 1] == 1:
         n += 1
        
@@ -98,7 +103,7 @@ def check(i,board_size):
 
     return n
 
-def user():
+def user(): # Handles player input and game moves
     global game, numbombs, num_flags
 
     while True:
@@ -170,11 +175,12 @@ def is_action(x):#checks if the action input is valid
     else:
         return False
 
-def area(i,board_size):
+def area(i,board_size): # Recursively reveals adjacent empty spaces
     global user_list
     global zero_list
     if i in zero_list:
         zero_list.remove(i)
+# Check and reveal all 8 adjacent positions
     side = i //board_size  #rest of this function is just checking each position around the given tile 
     down = i % board_size
     if side > 0 and down > 0 and list_one[i - board_size - 1] != "B":
